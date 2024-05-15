@@ -1,0 +1,38 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+
+# Перенаправляем с www на без www
+#RewriteCond %{HTTP_HOST} ^www\. [NC]
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.xn-----dlcbkcelnce3a9afr2adk4h1c4a.xn--p1ai$ [NC]
+RewriteRule ^(.*)$ http://xn-----dlcbkcelnce3a9afr2adk4h1c4a.xn--p1ai/$1 [R=301,L]
+# Перенаправляем с http на https
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Устанавливаем часовой пояс Asia/Krasnoyarsk
+SetEnv TZ Asia/Krasnoyarsk
+
+<ifModule mod_headers.c>
+<filesMatch "\.(ico|webp|svg|jpg|jpeg|png|gif|swf)$">
+Header set Cache-Control "max-age=31536000, public"
+</filesMatch>
+<filesMatch "\.(css|js)$">
+Header set Cache-Control "max-age=31536000, public"
+</filesMatch>
+<filesMatch "\.(xml|txt)$">
+Header set Cache-Control "max-age=31536000, public, must-revalidate"
+</filesMatch>
+#Внимание! Даные строки кешируют админку. Надо проверять
+<filesMatch "\.(html|htm)$">
+Header set Cache-Control "max-age=31536000, public"
+</filesMatch>
+<filesMatch "\.(woff2)$">
+Header set Cache-Control "max-age=31536000, public"
+</filesMatch>
+</ifModule>
